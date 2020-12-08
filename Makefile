@@ -22,7 +22,3 @@ start-swarm:
 	make build
 	docker swarm init
 	docker stack deploy -c docker-compose.yml keydbcluster
-push:
-	make build
-	docker tag keydbcluster riandyrn/keydbcluster:latest
-	docker push riandyrn/keydbcluster:latest
