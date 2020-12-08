@@ -1,7 +1,7 @@
 build:
-	docker build -t rediscluster .
+	docker build -t keydbcluster .
 rebuild:
-	docker build --no-cache -t rediscluster .
+	docker build --no-cache -t keydbcluster .
 down:
 	docker-compose down
 up:
@@ -11,18 +11,18 @@ up:
 monitor:
 	docker-compose logs
 run-cli:
-	docker-compose exec redis-cluster redis-cli -c -p 7000
+	docker-compose exec keydb-cluster keydb-cli -c -p 7000
 run-shell:
-	docker-compose exec redis-cluster /bin/bash
+	docker-compose exec keydb-cluster /bin/bash
 stop-swarm:
-	docker stack rm rediscluster
+	docker stack rm keydbcluster
 	docker swarm leave --force
 start-swarm:
 	make stop-swarm
 	make build
 	docker swarm init
-	docker stack deploy -c docker-compose.yml rediscluster
+	docker stack deploy -c docker-compose.yml keydbcluster
 push:
 	make build
-	docker tag rediscluster riandyrn/rediscluster:latest
-	docker push riandyrn/rediscluster:latest
+	docker tag keydbcluster riandyrn/keydbcluster:latest
+	docker push riandyrn/keydbcluster:latest

@@ -1,7 +1,7 @@
 version: "3"
 services:
-  redis-cluster:
-    image: rediscluster:latest
+  keydb-cluster:
+    image: keydbcluster:latest
     environment:
       - IP=0.0.0.0
     ports:
