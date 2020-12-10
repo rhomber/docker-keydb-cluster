@@ -2,6 +2,9 @@ version: "3"
 services:
   keydb-cluster:
     image: keydbcluster:latest
+    privileged: true
+    sysctls:
+      net.core.somaxconn: 1024
     environment:
       - IP=0.0.0.0
     ports:

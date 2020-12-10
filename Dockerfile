@@ -7,6 +7,7 @@ RUN apt-get install -y wget ruby-dev supervisor
 WORKDIR /workdir
 # copy supervisor config
 COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY keydb.conf /workdir/keydb.conf
 # expose ports
 EXPOSE 6400 6401 6402 6403 6404 6405
 # run multiple redis instances using supervisord 
@@ -14,7 +15,9 @@ EXPOSE 6400 6401 6402 6403 6404 6405
 # make all spawned process as redis cluster
 # use tail to keep container open
 
-CMD supervisord -c /etc/supervisor/supervisord.conf && \
+CMD echo never | tee /sys/kernel/mm/transparent_hugepage/enabled && \
+    echo never | tee /sys/kernel/mm/transparent_hugepage/defrag && \
+    supervisord -c /etc/supervisor/supervisord.conf && \
     sleep 3 && \
     if [ -z "$IP" ]; then IP=$(hostname -i | awk '{print $1}'); fi && \
     yes yes | keydb-cli --cluster create ${IP}:6400 ${IP}:6401 ${IP}:6402 ${IP}:6403 ${IP}:6404 ${IP}:6405 --cluster-replicas 1 && \
